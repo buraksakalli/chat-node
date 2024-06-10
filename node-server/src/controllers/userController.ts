@@ -1,10 +1,16 @@
 import { Request, Response } from "express";
 
+import User from "../models/User";
+import generateToken from "../utils/generateToken";
+
 export const registerUser = async (req: Request, res: Response) => {
   try {
     const { username, password } = req.body;
 
-    res.status(201).send(`User registered: ${username} ${password}`);
+    const user = new User({ username, password });
+    await user.save();
+
+    res.status(201).send("User registered");
   } catch (err) {
     res.status(500).send("Error registering user");
   }
@@ -14,8 +20,12 @@ export const loginUser = async (req: Request, res: Response) => {
   try {
     const { username, password } = req.body;
 
-    if (username === "admin" && password === "admin") {
-      res.status(200).send("Login successful");
+    const user = await User.findOne({ username });
+
+    if (user && (await user.comparePassword(password))) {
+      const token = generateToken(user._id.toString());
+
+      res.json({ token, userId: user._id });
     } else {
       res.status(401).send("Invalid credentials");
     }
