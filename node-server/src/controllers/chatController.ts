@@ -24,3 +24,24 @@ export const getChatHistory = async (req: Request, res: Response) => {
     res.status(500).send("Error retrieving chat history");
   }
 };
+
+export const deleteMessage = async (req: Request, res: Response) => {
+  try {
+    const { messageId, userId } = req.body;
+
+    const message = await Message.findById(messageId);
+
+    if (!message) {
+      return res.status(404).send("Message not found");
+    }
+
+    if (message.userId !== userId) {
+      return res.status(403).send("You can not delete this message");
+    }
+
+    await message.remove();
+    res.status(200).send("Message deleted");
+  } catch (err) {
+    res.status(500).send("Error deleting message");
+  }
+};
