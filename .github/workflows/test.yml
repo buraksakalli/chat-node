@@ -26,6 +26,11 @@ jobs:
           cd node-server
           npm install
 
+      - name: Set up .env file
+        run: |
+          cd node-server
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" > .env
+
       - name: Run tests
         run: |
           cd node-server
