@@ -19,6 +19,8 @@ export const login = async (e: any) => {
       expires: new Date(Date.now() + 1000 * 60 * 60),
     });
 
-    return "ok";
+    return data;
   }
+
+  return res.statusText;
 };

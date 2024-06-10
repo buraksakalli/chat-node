@@ -1,21 +1,10 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import io from "socket.io-client";
-
 import type { JwtPayload } from "jwt-decode";
 
+import { useMessage } from "./useMessage";
+
 import { cn } from "@/utils/cn";
-
-const socket = io(process.env.NEXT_PUBLIC_API_URL as string);
-
-type Message = {
-  _id: string;
-  message: string;
-  timestamp: string;
-  userId: string;
-  username: string;
-};
 
 interface User extends JwtPayload {
   id: string;
@@ -26,42 +15,15 @@ export const Messages = ({
   handleDelete,
   user,
 }: {
-  handleDelete: (messageId: string) => void;
+  handleDelete: (messageId: string) => Promise<boolean>;
   user: User;
 }) => {
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [input, setInput] = useState("");
+  const { id: currentUserId, username } = user;
 
-  const currentUserId = user?.id;
-  const username = user?.username;
-
-  useEffect(() => {
-    socket.emit("load messages");
-
-    socket.on("chat history", (messages) => {
-      setMessages(messages);
-    });
-
-    socket.on("chat message", (msg) => {
-      setMessages((prevMessages) => [...prevMessages, msg]);
-    });
-
-    return () => {
-      socket.off("chat history");
-      socket.off("chat message");
-    };
-  }, []);
-
-  const sendMessage = (e: any) => {
-    e.preventDefault();
-    const message = {
-      userId: currentUserId,
-      username,
-      message: input,
-    };
-    socket.emit("chat message", message);
-    setInput("");
-  };
+  const { messages, sendMessage, input, setInput, setMessages } = useMessage({
+    userId: currentUserId,
+    username,
+  });
 
   return (
     <div className="text-white mt-10 overflow-hidden">
@@ -83,7 +45,15 @@ export const Messages = ({
             {msg.userId === currentUserId && (
               <button
                 className="text-xs"
-                onClick={async () => handleDelete(msg._id)}
+                onClick={async () => {
+                  const res = await handleDelete(msg._id);
+
+                  if (res) {
+                    setMessages((prevMessages) =>
+                      prevMessages.filter((m) => m._id !== msg._id)
+                    );
+                  }
+                }}
               >
                 Delete
               </button>
@@ -92,7 +62,10 @@ export const Messages = ({
         ))}
       </ul>
 
-      <form onSubmit={sendMessage} className="absolute bottom-4 w-full pr-8">
+      <form
+        onSubmit={sendMessage}
+        className="absolute bottom-4 w-full pr-8 flex"
+      >
         <input
           type="text"
           value={input}
@@ -102,7 +75,7 @@ export const Messages = ({
         />
         <button
           type="submit"
-          className="bg-blue-500 text-white rounded-full p-2 ml-2"
+          className="bg-blue-500 text-white rounded-full ml-2 px-8"
         >
           Send
         </button>

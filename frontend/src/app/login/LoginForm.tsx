@@ -1,18 +1,21 @@
 "use client";
 
-import React from "react";
+import React, { useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { Toaster, toast } from "sonner";
 
 import { loginSchema } from "@/lib/schemas";
+import { cn } from "@/utils/cn";
 
 export type LoginFormData = z.infer<typeof loginSchema>;
 
 export const LoginForm = ({
   handleLogin,
 }: {
-  handleLogin: (data: LoginFormData) => void;
+  handleLogin: (data: LoginFormData) => Promise<{ token: string }>;
 }) => {
   const {
     register,
@@ -22,10 +25,19 @@ export const LoginForm = ({
     resolver: zodResolver(loginSchema),
   });
 
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
+
   const onSubmit = async (data: LoginFormData) => {
     const res = await handleLogin(data);
 
-    console.log({ res });
+    if (res?.token) {
+      startTransition(() => {
+        router.push("/dashboard");
+      });
+    } else {
+      toast.error("Invalid credentials");
+    }
   };
 
   return (
@@ -40,13 +52,27 @@ export const LoginForm = ({
         placeholder="Username"
         {...register("username")}
       />
+      {errors.username && (
+        <span className="text-red-500">{errors.username.message}</span>
+      )}
       <input
         className="border border-gray-300 p-2 mb-2 rounded-md"
         type="password"
         placeholder="Password"
         {...register("password")}
       />
-      <button className="bg-blue-500 text-white p-2 rounded-lg">Login</button>
+
+      {errors.password && (
+        <span className="text-red-500">{errors.password.message}</span>
+      )}
+      <button
+        className={cn("bg-blue-500 text-white p-2 rounded-lg", {
+          "opacity-50": isPending,
+        })}
+      >
+        Login
+      </button>
+      <Toaster />
     </form>
   );
 };

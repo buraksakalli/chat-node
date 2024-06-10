@@ -21,15 +21,10 @@ export default async function Page() {
       }
     );
 
-    console.log({ response });
-
     if (response.ok) {
-      // setMessages((prevMessages) =>
-      //   prevMessages.filter((msg) => msg._id !== messageId)
-      // );
-    } else {
-      console.error("Failed to delete message");
+      return true;
     }
+    return false;
   };
 
   if (!token) {
