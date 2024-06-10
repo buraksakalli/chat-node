@@ -2,11 +2,23 @@ import { Request, Response } from "express";
 
 import Message from "../models/Message";
 
-export const sendMessage = async (req: Request, res: Response) => {
-  try {
-    const { userId, username, message } = req.body;
+interface AuthenticatedRequest extends Request {
+  user?: {
+    id: string;
+    username: string;
+  };
+}
 
-    const newMessage = new Message({ userId, username, message });
+export const sendMessage = async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const { message } = req.body;
+
+    const newMessage = new Message({
+      userId: req.user?.id,
+      username: req.user?.username,
+      message,
+    });
+
     await newMessage.save();
 
     res.status(201).json(newMessage);
@@ -25,9 +37,12 @@ export const getChatHistory = async (req: Request, res: Response) => {
   }
 };
 
-export const deleteMessage = async (req: Request, res: Response) => {
+export const deleteMessage = async (
+  req: AuthenticatedRequest,
+  res: Response
+) => {
   try {
-    const { messageId, userId } = req.body;
+    const { messageId } = req.body;
 
     const message = await Message.findById(messageId);
 
@@ -35,7 +50,7 @@ export const deleteMessage = async (req: Request, res: Response) => {
       return res.status(404).send("Message not found");
     }
 
-    if (message.userId !== userId) {
+    if (message.userId !== req.user?.id) {
       return res.status(403).send("You can not delete this message");
     }
 
