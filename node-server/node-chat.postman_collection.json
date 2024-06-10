@@ -1,0 +1,164 @@
+{
+	"info": {
+		"_postman_id": "b4de4c53-0d2a-4333-8284-d41f4e86ffa2",
+		"name": "Node Chat",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "36208792"
+	},
+	"item": [
+		{
+			"name": "User Register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"testuser\", \n    \"password\": \"testpassword\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/users/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"users",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"testuser2\",\n    \"password\": \"testpassword\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/users/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"users",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Send Message",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NjY3ZGQ4MmY1MzUxNzE4NzZmZjRmOSIsInVzZXJuYW1lIjoidGVzdHVzZXIyIiwiaWF0IjoxNzE4MDAxMjY1LCJleHAiOjE3MTgwMDQ4NjV9.Eo-FtWPydKVVamuW517pKnzoLrDZHteoA4dnW2XYtLc",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"message\": \"Hello\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/chat/send",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"chat",
+						"send"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Chat History",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NjY3ZGQ4MmY1MzUxNzE4NzZmZjRmOSIsInVzZXJuYW1lIjoidGVzdHVzZXIyIiwiaWF0IjoxNzE4MDAxMjY1LCJleHAiOjE3MTgwMDQ4NjV9.Eo-FtWPydKVVamuW517pKnzoLrDZHteoA4dnW2XYtLc",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/chat/history",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"chat",
+						"history"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Message",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NjY3ZGQ4MmY1MzUxNzE4NzZmZjRmOSIsInVzZXJuYW1lIjoidGVzdHVzZXIyIiwiaWF0IjoxNzE4MDAxMjY1LCJleHAiOjE3MTgwMDQ4NjV9.Eo-FtWPydKVVamuW517pKnzoLrDZHteoA4dnW2XYtLc",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"messageId\": \"\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/chat/delete",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"chat",
+						"delete"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
