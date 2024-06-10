@@ -1,14 +1,13 @@
 # Chat Server
 
-![image](https://github.com/buraksakalli/chat-node/assets/10114716/8b9567f8-7702-4b85-970d-eb4d23df0ecf)
+![image](https://github.com/buraksakalli/chat-node/assets/10114716/4bc83592-5f38-4017-8971-d21ce898bb21)
 
 This is a simple chat server. It is written in Node.js and uses the socket.io library.
 
 ## Installation
 
-1. Clone the repository
-2. Run `docker-compose up --build` to start the server
-3. Visit `http://localhost:3000` in your browser
+1. Run `docker-compose up --build` to start the server
+2. Visit `http://localhost:3000` in your browser
 
 ## Features
 
@@ -17,6 +16,7 @@ This is a simple chat server. It is written in Node.js and uses the socket.io li
 - Storage of chat history
 - Encryption of passwords
 - Unit test
+- Postman collection for API testing
 
 ## Bonus Features
 
